@@ -12,14 +12,17 @@ use app\models\Worker;
  */
 class WorkerSearch extends Worker
 {
+    public $group_id;
+    public $skills_id;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-          [['id', 'is_present'], 'integer'],
-          [['first_name', 'last_name'], 'safe'],
+          [['is_present'], 'boolean'],
+          [['group_id', 'skills_id'], 'integer'],
+          [['last_name'], 'safe'],
         ];
     }
 
@@ -41,13 +44,13 @@ class WorkerSearch extends Worker
      */
     public function search($params)
     {
-        $query = Worker::find();
-
-        // add conditions that should always apply here
+        $query = Worker::find()->with(['groups', 'skills']);
+        $query->joinWith(['workerGroups', 'workerSkills'], false);
 
         $dataProvider = new ActiveDataProvider([
           'query' => $query,
         ]);
+
 
         $this->load($params);
 
@@ -59,8 +62,9 @@ class WorkerSearch extends Worker
 
         // grid filtering conditions
         $query->andFilterWhere([
-          'id' => $this->id,
           'is_present' => $this->is_present,
+          'worker_group.group_id' => $this->group_id,
+          'worker_skills.skills_id' => $this->skills_id,
         ]);
 
         $query->andFilterWhere(['like', 'first_name', $this->first_name])

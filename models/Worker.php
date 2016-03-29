@@ -17,6 +17,7 @@ use Yii;
  */
 class Worker extends \yii\db\ActiveRecord
 {
+
     /**
      * @inheritdoc
      */
@@ -44,12 +45,19 @@ class Worker extends \yii\db\ActiveRecord
     {
         return [
           'id' => 'ID',
-          'first_name' => 'First Name',
-          'last_name' => 'Last Name',
-          'is_present' => 'Is Present',
+          'first_name' => 'Имя',
+          'last_name' => 'Фамилия',
+          'is_present' => 'На месте',
         ];
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWorkerGroups()
+    {
+        return $this->hasMany(WorkerGroup::className(), ['worker_id' => 'id']);
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -60,6 +68,13 @@ class Worker extends \yii\db\ActiveRecord
           ['worker_id' => 'id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getWorkerSkills()
+    {
+        return $this->hasMany(WorkerSkills::className(), ['worker_id' => 'id']);
+    }
 
     /**
      * @return \yii\db\ActiveQuery
