@@ -2,6 +2,10 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use app\models\Worker;
+use app\models\Group;
+use app\models\Skills;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\search\WorkerSearch */
@@ -19,9 +23,28 @@ $this->params['breadcrumbs'][] = $this->title;
       'dataProvider' => $dataProvider,
       'filterModel' => $searchModel,
       'columns' => [
-        'id',
         'last_name',
-        'is_present',
+        [
+          'label' => 'Группы',
+          'attribute' => 'group_id',
+          'filter' => Group::find()->select(['name', 'id'])->indexBy('id')->column(),
+          'value' => function (Worker $worker) {
+              return implode(', ', ArrayHelper::map($worker->groups, 'id', 'name'));
+          },
+        ],
+        [
+          'label' => 'Навыки',
+          'attribute' => 'skills_id',
+          'filter' => Skills::find()->select(['name', 'id'])->indexBy('id')->column(),
+          'value' => function (Worker $worker) {
+              return implode(', ', ArrayHelper::map($worker->skills, 'id', 'name'));
+          },
+        ],
+        [
+          'attribute' => 'is_present',
+          'filter' => [1 => 'Да', 0 => 'Нет'],
+          'format' => 'boolean'
+        ]
       ],
     ]); ?>
 </div>

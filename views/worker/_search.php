@@ -15,11 +15,11 @@ use yii\widgets\ActiveForm;
       'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'last_name') ?>
+    <?= $form->field($model, 'last_name', ['options' => ['style' => 'width: 200px']]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton('Поиск', ['class' => 'btn btn-primary']) ?>
+        <?= Html::resetButton('Очистить', ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
